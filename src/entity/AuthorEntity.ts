@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import { Book } from "./Book";
+import { BookEntity } from "./BookEntity";
 
-@Entity()
-export class Author {
+@Entity('author')
+export class AuthorEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,7 +10,7 @@ export class Author {
   @Column()
   name: string;
 
-  @ManyToMany(() => Book)
+  @ManyToMany(() => BookEntity)
   @JoinTable({ name: 'book_author' })
-  bokks: Book[]
+  books: BookEntity[]
 }

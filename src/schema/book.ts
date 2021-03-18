@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
-import { App } from '../types/app'
+import { Book } from '../types/book'
 
-export const schemaBookCreate: Yup.SchemaOf<App.Book.Create.Body> = Yup.object().shape({
+export const schemaBookCreate: Yup.SchemaOf<Book.Create.Body> = Yup.object().shape({
   title: Yup.string().required(),
   year: Yup.number().required()
 })

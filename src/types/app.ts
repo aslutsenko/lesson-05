@@ -1,27 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { LogLevel } from "../enum/log-level";
+import { NextFunction, Request as RequestExpress, Response } from 'express'
 
 export declare namespace App {
-  namespace Config {
-    interface Service {
-      readonly port: number;
-      readonly logLevel: LogLevel;
-    }
-  }
-
-  namespace Logger {
-    interface Service {
-      log(level: LogLevel, message: string): void;
-      error(message: string): void
-      warn(message: string): void
-      info(message: string): void
-      http(message: string): void
-      verbose(message: string): void
-      debug(message: string): void
-      silly(message: string): void
-    }
-  }
-
   namespace Error {
     interface HttpError {
       readonly message: string;
@@ -40,16 +19,10 @@ export declare namespace App {
     }
   }
 
-  namespace Book {
-    namespace Create {
-      interface Body {
-        title: string;
-        year: number;
-      }
-    }
+  type Request = RequestExpress & {
   }
 
-  type Action = (req: Request, res: Response, next: NextFunction) => Promise<void>
+  type Action<T extends Request = Request> = (req: T, res: Response, next: NextFunction) => Promise<void>
 
   interface Route {
     method: 'get' | 'post';

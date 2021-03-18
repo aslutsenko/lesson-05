@@ -1,19 +1,20 @@
 import { Request } from "express";
 import { getRepository } from "typeorm";
-import { Book } from "../entity/Book";
+import { BookEntity } from "../entity/BookEntity";
 import { BadRequestError } from "../error/BadRequestError";
 import { NotFoundError } from "../error/NotFoundError";
 import { schemaBookCreate } from "../schema/book";
 import { App } from "../types/app";
+import { Book } from '../types/book'
 
-const repository = getRepository(Book)
+const repository = getRepository(BookEntity)
 
 export const bookGetAll: App.Action = async (req, res) => {
   const books = await repository.find({ relations: ['authors'] })
   res.json(books)
 }
 
-export const bookGetById: App.Action = async (req: Request<{ id: string }>, res) => {
+export const bookGetById: App.Action<Book.Single.Request> = async (req, res) => {
   const book = await repository.findOne(req.params.id, { relations: ['authors'] })
 
   if (!book) {
@@ -23,7 +24,7 @@ export const bookGetById: App.Action = async (req: Request<{ id: string }>, res)
   res.json(book)
 }
 
-export const bookCreate: App.Action = async (req, res) => {
+export const bookCreate: App.Action<Book.Create.Request> = async (req, res) => {
   await schemaBookCreate.validate(req.body, { abortEarly: false })
   const book = await repository.save(req.body)
   res.status(201).json(book)
