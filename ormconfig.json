@@ -3,6 +3,7 @@
    "database": "data/database.sqlite",
    "synchronize": true,
    "logging": false,
+   "migrationsRun": true,
    "entities": [
       "src/entity/**/*.ts"
    ],

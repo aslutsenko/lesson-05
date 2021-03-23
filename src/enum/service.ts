@@ -1,4 +1,6 @@
 export enum Service {
   Config = 'config',
-  Logger = 'logger'
+  Logger = 'logger',
+  Auth = 'auth',
+  File = 'file'
 }

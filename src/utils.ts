@@ -1,16 +1,29 @@
-import { Request, Response } from "express";
-import { HttpError } from "./error/HttpError";
-import { App } from "./types/app";
+import { Request, Response } from 'express'
+import { ValidationError } from 'yup'
+import { BadRequestError } from './error/BadRequestError'
+import { HttpError } from './error/HttpError'
+import { InternalServerError } from './error/InternalServerError'
+import { App } from './types/app'
 
-export const error = (err: HttpError, req: Request, res: Response): void => {
-  const body: App.Error.Body = {
-    message: err.message,
-    status: err.status,
-    timestamp: err.timestamp.toISOString(),
-    method: req.method,
-    path: req.path,
-    errors: err.errors
+export const handlerError = (err: Error | HttpError, req: Request, res: Response): void => {
+  let error = err
+
+  if (error?.name === 'ValidationError') {
+    error = new BadRequestError((error as ValidationError)?.errors ?? [])
+  } else if (error?.name !== 'HttpError') {
+    error = new InternalServerError([err.message])
   }
 
-  res.status(err.status).json(body)
+  const { status, errors } = error as HttpError
+
+  const body: App.Error.Body = {
+    message: error.message,
+    status,
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    path: req.path,
+    errors
+  }
+
+  res.status(status).json(body)
 }

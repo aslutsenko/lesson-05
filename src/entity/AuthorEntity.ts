@@ -1,14 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import { BookEntity } from "./BookEntity";
+/**
+ * Автор
+ */
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { BookEntity } from './BookEntity'
 
 @Entity('author')
 export class AuthorEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
-  @Column()
-  name: string;
+  @Column({ unique: true })
+  name: string
 
   @ManyToMany(() => BookEntity)
   @JoinTable({ name: 'book_author' })
